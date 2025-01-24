@@ -1,1 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Intellectra Website</title>
+  <!-- Internal CSS for simplicity -->
+  <style>
+    /* BASIC RESET & BODY */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Lato", "Roboto", sans-serif;
+      background-color: #f2f4f6;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    /* HEADER / NAVBAR */
+    header {
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #007bff;
+      text-decoration: none;
+    }
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      gap: 1rem;
+    }
+    nav li {
+      display: inline;
+    }
+    nav a {
+      color: #333;
+      text-decoration: none;
+      padding: 0.3rem 0.6rem;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #007bff;
+    }
+
+    /* COMMON SECTION STYLES */
+    section {
+      display: none; /* hidden by default, shown by JS */
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    section.active {
+      /* show the active section */
+      display: block;
+    }
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+
+    /* HOME SECTION (Hero + Extra Focus) */
+    #home {
+      padding: 0; /* override the default 2rem since hero is full-width */
+    }
+    .hero {
+      background: linear-gradient(135deg, #cceeff 0%, #e6f7ff 100%);
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      box-shadow: inset 0 -1px 4px rgba(0,0,0,0.05);
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .btn-primary,
+    .btn-secondary {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn-primary {
+      background-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    /* HOME: FOCUSED EXTRA SECTION */
+    .focus-section {
+      background-color: #fff;
+      padding: 2rem;
+      text-align: center;
+      margin-top: -2rem; /* pull it up slightly to blend with hero */
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      max-width: 900px;
+      margin: -2rem auto 2rem; 
+      position: relative;
+      z-index: 1;
+    }
+    .focus-section h2 {
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+    .focus-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .focus-item {
+      flex: 1 1 250px;
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .focus-item:hover {
+      transform: translateY(-3px);
+    }
+    .focus-item h3 {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    .focus-item p {
+      color: #555;
+    }
+
+    /* STATS SECTION (HOME) */
+    #stats-section {
+      padding: 2rem;
+      text-align: center;
+    }
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .stat {
+      background-color: #fff;
+      border-radius: 4px;
+      padding: 1.5rem;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* ABOUT SECTION */
+    .about-section ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+    }
+
+    /* FEATURES SECTION */
+    .features-section h2 {
+      margin-top: 2rem;
+      color: #007bff;
+    }
+
+    /* ROADMAP SECTION */
+    .timeline .milestone {
+      background-color: #fff;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-left: 4px solid #007bff;
+    }
+    .progress-updates {
+      margin-top: 2rem;
+    }
+
+    /* COMMUNITY SECTION */
+    .testimonials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .testimonial {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 4px;
+      flex: 1 1 250px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* CONTACT SECTION */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin-bottom: 2rem;
+    }
+    .contact-form label {
+      margin-top: 1rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .contact-form button {
+      margin-top: 1.5rem;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+    .contact-form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* BLOG SECTION */
+    .blog-post {
+      background-color: #fff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* GOVERNANCE SECTION */
+    .governance-section h2 {
+      margin-top: 2rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .social-links a {
+      margin-right: 1rem;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .social-links a:hover {
+      color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <a href="#" class="logo" onclick="showSection('home')">Intellectra</a>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="showSection('about')">About Us</a></li>
+        <li><a href="#" onclick="showSection('features')">Features</a></li>
+        <li><a href="#" onclick="showSection('roadmap')">Roadmap</a></li>
+        <li><a href="#" onclick="showSection('community')">Community</a></li>
+        <li><a href="#" onclick="showSection('contact')">Contact</a></li>
+        <li><a href="#" onclick="showSection('blog')">Blog</a></li>
+        <li><a href="#" onclick="showSection('governance')">Governance</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HOME (Expanded Focus) -->
+  <section id="home" class="active">
+    <!-- Hero Area -->
+    <div class="hero">
+      <div class="hero-content">
+        <h1>Unlocking the Potential of Collaborative AI.</h1>
+        <p>
+          Welcome to Intellectra! Our mission is to drive innovative AI collaboration worldwide, 
+          bridging cutting-edge technology and real-world applications for a brighter future.
+        </p>
+        <div class="cta-buttons">
+          <a href="#" class="btn-primary" onclick="scrollToStats()">Learn More</a>
+          <a href="#" class="btn-secondary" onclick="showSection('features')">Explore Features</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Focus Section -->
+    <div class="focus-section">
+      <h2>Why Choose Intellectra?</h2>
+      <div class="focus-grid">
+        <div class="focus-item">
+          <h3>Cutting-Edge AI Modules</h3>
+          <p>Modular AI systems ready for adaptation in various industries.</p>
+        </div>
+        <div class="focus-item">
+          <h3>Global Collaboration</h3>
+          <p>Join a network of innovators pushing the boundaries of AI together.</p>
+        </div>
+        <div class="focus-item">
+          <h3>Decentralized Governance</h3>
+          <p>Shape the future of AI through our transparent, community-driven model.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Highlights / Stats -->
+    <div id="stats-section" class="stats">
+      <h2>Key Highlights</h2>
+      <div class="stats-grid">
+        <div class="stat">
+          <h3>+80% AI Adoption Rate</h3>
+          <p>Among our early adopters.</p>
+        </div>
+        <div class="stat">
+          <h3>Global Collaboration</h3>
+          <p>Connecting AI innovators worldwide.</p>
+        </div>
+        <div class="stat">
+          <h3>Decentralized Ecosystem</h3>
+          <p>Community-driven governance and decisions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section id="about">
+    <h1>About Intellectra</h1>
+    <h2>Mission Statement</h2>
+    <p>
+      Intellectra’s commitment to bridging AI innovation and real-world applications 
+      stands at the forefront of everything we do.
+    </p>
+
+    <h2>Vision</h2>
+    <p>
+      A future of collaborative AI solutions tackling global challenges—powered by a 
+      thriving community and robust technology.
+    </p>
+
+    <h2>Our Story</h2>
+    <p>
+      From inception to now, Intellectra has grown from a small research project to a 
+      worldwide ecosystem for AI collaboration.
+    </p>
+    <ul>
+      <li><strong>2019</strong>: Initial concept and research phase.</li>
+      <li><strong>2020</strong>: Prototype creation and early adopter testing.</li>
+      <li><strong>2022</strong>: Launch of public beta and expansion of AI Toolkits.</li>
+      <li><strong>2024</strong>: Decentralized governance structure introduced.</li>
+      <li><strong>2025</strong>: Ongoing global collaborations and expansions.</li>
+    </ul>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="features-section">
+    <h1>Our Features</h1>
+
+    <h2>Dynamic AI Toolkits</h2>
+    <p>
+      Our AI toolkits are modular, adaptable, and customizable, allowing you to integrate 
+      the exact functionality you need for your project or industry.
+    </p>
+    
+    <h2>Real-Time Insights</h2>
+    <p>
+      Intellectra empowers data-driven decision-making with dashboards, analytics, and 
+      immediate feedback loops to iterate fast and innovate faster.
+    </p>
+    
+    <h2>AI Learning Hub</h2>
+    <p>
+      We offer a wide range of resources, courses, and guides to help users at all levels 
+      harness the power of AI. From basic tutorials to advanced research, our community 
+      can grow together.
+    </p>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <h1>Roadmap</h1>
+    <div class="timeline">
+      <div class="milestone">
+        <h3>Phase 1: Prototype Creation</h3>
+        <p>Initial research and development of core AI modules.</p>
+      </div>
+      <div class="milestone">
+        <h3>Phase 2: Open Beta</h3>
+        <p>User testing, refining features, and gathering feedback.</p>
+      </div>
+      <div class="milestone">
+        <h3>Phase 3: Decentralized Governance Implementation</h3>
+        <p>Token-weighted voting, proposals, and transparent governance processes.</p>
+      </div>
+      <div class="milestone">
+        <h3>Phase 4: Future Integrations</h3>
+        <p>Expansion of partnerships, enterprise solutions, and advanced AI modules.</p>
+      </div>
+    </div>
+
+    <div class="progress-updates">
+      <h2>Progress Updates</h2>
+      <ul>
+        <li>✅ Completed: Phase 1 - Prototype</li>
+        <li>✅ Completed: Phase 2 - Open Beta</li>
+        <li>⏳ In Progress: Phase 3 - Decentralized Governance</li>
+        <li>🚀 Next Steps: Future integrations and global scaling</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section id="community">
+    <h1>Join Intellectra</h1>
+    <p>
+      Be a part of our growing ecosystem. Connect with us on social media and share your 
+      AI journey, or participate in community-driven governance.
+    </p>
+    <div class="social-icons">
+      <a href="#">Discord</a> |
+      <a href="#">Twitter</a> |
+      <a href="#">Telegram</a>
+    </div>
+
+    <h2>Testimonials / Case Studies</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>"Intellectra revolutionized our AI development process with their real-time insights."</p>
+        <span>- Tech Startup CEO</span>
+      </div>
+      <div class="testimonial">
+        <p>"The community-driven approach is a game changer, allowing us to shape the platform's future."</p>
+        <span>- AI Research Lead</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h1>Get in Touch</h1>
+    <form class="contact-form">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required>
+
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" required>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div class="support-resources">
+      <h2>Support Resources</h2>
+      <p>
+        Check out our <a href="#">FAQs</a> for help with onboarding and troubleshooting.
+      </p>
+      <p>
+        Email: <a href="mailto:support@intellectra.ai">support@intellectra.ai</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- BLOG / INSIGHTS -->
+  <section id="blog" class="blog-section">
+    <h1>Intellectra Blog & Insights</h1>
+    
+    <article class="blog-post">
+      <h2>Thought Leadership in AI</h2>
+      <p>
+        Articles exploring AI trends, use cases, and Intellectra innovations. Dive deep into 
+        how collaboration is reshaping the AI landscape.
+      </p>
+    </article>
+
+    <article class="blog-post">
+      <h2>Announcements</h2>
+      <p>
+        Stay updated on product launches, events, and community highlights. We post frequent 
+        updates on new features and platform expansions.
+      </p>
+    </article>
+
+    <article class="blog-post">
+      <h2>Tutorials</h2>
+      <p>
+        Step-by-step guides for getting started with Intellectra. Learn how to leverage 
+        our features for maximum impact, whether you’re a beginner or an experienced AI developer.
+      </p>
+    </article>
+  </section>
+
+  <!-- GOVERNANCE -->
+  <section id="governance" class="governance-section">
+    <h1>Decentralized Governance</h1>
+    <p>
+      Intellectra incorporates community-driven decisions through transparent voting 
+      mechanisms and open proposals. 
+    </p>
+
+    <h2>Voting Mechanisms</h2>
+    <p>
+      Our token-weighted voting system allows stakeholders to vote on key proposals, 
+      ensuring a fair and decentralized approach to platform evolution.
+    </p>
+
+    <h2>Transparency Reports</h2>
+    <p>
+      Access publicly available data on governance decisions, budgets, and roadmap progress. 
+      Our commitment to transparency fosters trust and collective ownership.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Intellectra. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#">Twitter</a>
+      <a href="#">Discord</a>
+      <a href="#">Telegram</a>
+    </div>
+  </footer>
+
+  <!-- INTERNAL JAVASCRIPT -->
+  <script>
+    // Show only the requested section, hide others.
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll("section");
+      sections.forEach((sec) => {
+        sec.classList.remove("active");
+      });
+      document.getElementById(sectionId).classList.add("active");
+      window.scrollTo(0, 0); // Scroll to top after navigation
+    }
+
+    // Scroll to the Key Highlights (stats) area on the home section
+    function scrollToStats() {
+      showSection("home");
+      const statsSection = document.getElementById("stats-section");
+      if (statsSection) {
+        statsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    // Contact form submission alert
+    const contactForm = document.querySelector(".contact-form");
+    if (contactForm) {
+      contactForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        alert("Thank you for your message! We'll get back to you soon.");
+        contactForm.reset();
+      });
+    }
+  </script>
+</body>
+</html>
 
